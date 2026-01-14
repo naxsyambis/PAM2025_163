@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -21,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -50,12 +50,12 @@ fun ProductScreen(
     val viewModel: ProductHomeViewModel =
         viewModel(factory = PenyediaViewModel.Factory)
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var productToDelete by remember { mutableStateOf<DataProduct?>(null) }
+
     LaunchedEffect(Unit) {
         viewModel.loadProduct()
     }
-
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var productToDelete by remember { mutableStateOf<DataProduct?>(null) }
 
     Scaffold(
         topBar = {
@@ -67,28 +67,35 @@ fun ProductScreen(
             }
         }
     ) { padding ->
+
         when (val state = viewModel.listProduct) {
 
-            is StatusUiProduct.Loading ->
+            is StatusUiProduct.Loading -> {
                 Text("Loading...", Modifier.padding(padding))
+            }
 
-            is StatusUiProduct.Error ->
+            is StatusUiProduct.Error -> {
                 Text("Gagal load data", Modifier.padding(padding))
+            }
 
-            is StatusUiProduct.Success ->
-                LazyColumn(Modifier.padding(padding)) {
-                    items(state.listProduct) { DataProduct ->
+            is StatusUiProduct.Success -> {
+                LazyColumn(
+                    modifier = Modifier.padding(padding)
+                ) {
+                    items(state.listProduct) { product ->
+
                         Card(
-                            Modifier
+                            modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth()
+                                .clickable { navigateToEdit(product) }
                         ) {
                             Column {
 
                                 // ===== GAMBAR PRODUK =====
                                 AsyncImage(
-                                    model = DataProduct.image_url,
-                                    contentDescription = DataProduct.product_name,
+                                    model = product.image_url,
+                                    contentDescription = product.product_name,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(160.dp),
@@ -100,32 +107,37 @@ fun ProductScreen(
                                 ) {
 
                                     Text(
-                                        text = DataProduct.product_name,
+                                        text = product.product_name,
                                         style = MaterialTheme.typography.titleMedium
                                     )
 
                                     Text(
-                                        text = "Kategori: ${DataProduct.category_name}",
+                                        text = "Kategori: ${product.category_name}",
                                         style = MaterialTheme.typography.bodySmall
                                     )
 
                                     Text(
-                                        text = if (DataProduct.is_active == 1) "Status: Aktif" else "Status: Non-Aktif",
-                                        color = if (DataProduct.is_active == 1) Color(0xFF4CAF50) else Color.Red, // Hijau atau Merah
+                                        text = if (product.is_active == 1)
+                                            "Status: Aktif"
+                                        else
+                                            "Status: Non-Aktif",
+                                        color = if (product.is_active == 1)
+                                            Color(0xFF4CAF50)
+                                        else
+                                            Color.Red,
                                         style = MaterialTheme.typography.labelSmall,
                                         modifier = Modifier.padding(vertical = 4.dp)
                                     )
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
-                                    // ===== AKSI DELETE (SOFT DELETE) =====
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.End
                                     ) {
-                                        if (DataProduct.is_active == 1) {
+                                        if (product.is_active == 1) {
                                             IconButton(onClick = {
-                                                productToDelete = DataProduct
+                                                productToDelete = product
                                                 showDeleteDialog = true
                                             }) {
                                                 Icon(
@@ -135,11 +147,9 @@ fun ProductScreen(
                                                 )
                                             }
                                         } else {
-                                            // Jika Non-Aktif -> Tampilkan Tombol Aktifkan
                                             Button(
                                                 onClick = {
-                                                    // Memanggil fungsi re-aktivasi
-                                                    viewModel.reActivateProduct(DataProduct)
+                                                    viewModel.reActivateProduct(product)
                                                 },
                                                 colors = ButtonDefaults.buttonColors(
                                                     containerColor = Color(0xFF4CAF50)
@@ -154,6 +164,30 @@ fun ProductScreen(
                         }
                     }
                 }
+            }
         }
+    }
+
+    if (showDeleteDialog && productToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Nonaktifkan Produk") },
+            text = {
+                Text("Produk akan disembunyikan (soft delete), bukan dihapus permanen.")
+            },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.nonActiveProduct(productToDelete!!.product_id)
+                    showDeleteDialog = false
+                }) {
+                    Text("Nonaktifkan")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDeleteDialog = false }) {
+                    Text("Batal")
+                }
+            }
+        )
     }
 }

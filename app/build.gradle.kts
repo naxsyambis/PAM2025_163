@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.material.icons.extended)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.material3)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -2,10 +2,6 @@ package com.example.fashta_163.modeldata
 
 import kotlinx.serialization.Serializable
 
-/* =======================
-   DATA DARI API / DATABASE
-   ======================= */
-
 @Serializable
 data class DataProduct(
     val product_id: Int = 0,
@@ -16,10 +12,6 @@ data class DataProduct(
     val is_active: Int = 1
 )
 
-/* =======================
-   DATA FORM (CREATE / EDIT)
-   ======================= */
-
 data class DetailProduct(
     val product_id: Int = 0,
     val product_name: String = "",
@@ -27,18 +19,10 @@ data class DetailProduct(
     val image_url: String = ""
 )
 
-/* =======================
-   UI STATE (SCREEN)
-   ======================= */
-
 data class UIStateProduct(
     val detailProduct: DetailProduct = DetailProduct(),
     val isEntryValid: Boolean = false
 )
-
-/* =======================
-   MAPPER
-   ======================= */
 
 fun DetailProduct.toDataProduct(): DataProduct =
     DataProduct(
