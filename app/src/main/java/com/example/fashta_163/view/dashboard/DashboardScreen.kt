@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    onNavigateToPengaturan: () -> Unit
+    onNavigateToPengaturan: () -> Unit,
+    onNavigateToProduct: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -54,6 +55,27 @@ fun DashboardScreen(
                     )
                 }
             }
+
+            // ===== MENU PRODUK =====
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigateToProduct() } //
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Produk",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "Kelola produk dan item produk",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+
         }
     }
 }

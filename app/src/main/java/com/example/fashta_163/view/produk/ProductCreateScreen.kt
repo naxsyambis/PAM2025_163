@@ -49,6 +49,21 @@ fun ProductCreateScreen(
                 .padding(16.dp)
         ) {
 
+            OutlinedTextField(
+                value = uiState.detailProduct.image_url,
+                onValueChange = {
+                    entryViewModel.updateUiState(
+                        uiState.detailProduct.copy(
+                            image_url = it
+                        )
+                    )
+                },
+                label = { Text("URL Gambar (opsional)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // ===== NAMA PRODUK =====
             OutlinedTextField(
                 value = uiState.detailProduct.product_name,

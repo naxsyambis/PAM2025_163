@@ -1,7 +1,10 @@
 package com.example.fashta_163.view.produk
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,9 +16,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.fashta_163.modeldata.DataProduct
 import com.example.fashta_163.viewmodel.Produk.ProductHomeViewModel
 import com.example.fashta_163.viewmodel.Produk.StatusUiProduct
@@ -29,6 +35,10 @@ fun ProductScreen(
 ) {
     val viewModel: ProductHomeViewModel =
         viewModel(factory = PenyediaViewModel.Factory)
+
+    LaunchedEffect(Unit) {
+        viewModel.loadProduct()
+    }
 
     Scaffold(
         topBar = {
@@ -56,12 +66,46 @@ fun ProductScreen(
                                 .padding(8.dp)
                                 .fillMaxWidth()
                         ) {
-                            Column(Modifier.padding(16.dp)) {
-                                Text(DataProduct.product_name)
-                                Text(
-                                    "Kategori: ${DataProduct.category_name}",
-                                    style = MaterialTheme.typography.bodySmall
+                            Column {
+
+                                // ===== GAMBAR PRODUK =====
+                                AsyncImage(
+                                    model = DataProduct.image_url,
+                                    contentDescription = DataProduct.product_name,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(160.dp),
+                                    contentScale = ContentScale.Crop
                                 )
+
+                                Column(
+                                    modifier = Modifier.padding(16.dp)
+                                ) {
+
+                                    Text(
+                                        text = DataProduct.product_name,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+
+                                    Text(
+                                        text = "Kategori: ${DataProduct.category_name}",
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    // ===== AKSI DELETE (SOFT DELETE) =====
+                                    Text(
+                                        text = "Nonaktifkan",
+                                        color = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.clickable {
+                                            viewModel.nonActiveProduct(
+                                                DataProduct.product_id
+                                            )
+                                        }
+                                    )
+
+                                }
                             }
                         }
                     }

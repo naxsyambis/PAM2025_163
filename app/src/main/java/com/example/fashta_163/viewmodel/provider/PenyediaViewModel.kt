@@ -7,6 +7,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.fashta_163.repository.AplikasiFash
 import com.example.fashta_163.viewmodel.LoginViewModel
+import com.example.fashta_163.viewmodel.Produk.ProductCreateViewModel
+import com.example.fashta_163.viewmodel.Produk.ProductEditViewModel
+import com.example.fashta_163.viewmodel.Produk.ProductHomeViewModel
 import com.example.fashta_163.viewmodel.RegisterViewModel
 import com.example.fashta_163.viewmodel.pengaturan.CategoryCreateViewModel
 import com.example.fashta_163.viewmodel.pengaturan.CategoryDeleteViewModel
@@ -52,6 +55,23 @@ object PenyediaViewModel {
         initializer {
             CategoryDeleteViewModel(
                 aplikasiFash().containerApp.repositoryCategory
+            )
+        }
+
+        // ===== PRODUCT =====
+        initializer {
+            ProductHomeViewModel(
+                aplikasiFash().containerApp.repositoryProduct
+            )
+        }
+        initializer {
+            ProductCreateViewModel(
+                aplikasiFash().containerApp.repositoryProduct
+            )
+        }
+        initializer {
+            ProductEditViewModel(
+                aplikasiFash().containerApp.repositoryProduct
             )
         }
     }

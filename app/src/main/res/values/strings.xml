@@ -5,4 +5,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="pengaturan">Pengaturan</string>
     <string name="kelola_kategori">Kelola Kategori</string>
+    <string name="product">Product</string>
+    <string name="tambah_product">Tamabah Product</string>
 </resources>
+

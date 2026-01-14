@@ -3,6 +3,7 @@ package com.example.fashta_163.repository
 import android.app.Application
 import com.example.fashta_163.apiservice.ServiceApiAuth
 import com.example.fashta_163.apiservice.ServiceApiCategory
+import com.example.fashta_163.apiservice.ServiceApiProduct
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -13,6 +14,8 @@ import retrofit2.Retrofit
 interface ContainerApp {
     val repositoryAuth: RepositoryAuth
     val repositoryCategory: RepositoryCategory
+
+    val repositoryProduct: RepositoryProduct
 }
 
 class DefaultContainerApp : ContainerApp {
@@ -53,6 +56,14 @@ class DefaultContainerApp : ContainerApp {
 
     override val repositoryCategory: RepositoryCategory by lazy {
         JaringanRepositoryCategory(retrofitServiceCategory)
+    }
+
+    private val retrofitServiceProduct: ServiceApiProduct by lazy {
+        retrofit.create(ServiceApiProduct::class.java)
+    }
+
+    override val repositoryProduct: RepositoryProduct by lazy {
+        JaringanRepositoryProduct(retrofitServiceProduct)
     }
 
 }

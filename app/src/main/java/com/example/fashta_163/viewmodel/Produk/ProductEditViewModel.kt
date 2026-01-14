@@ -17,7 +17,6 @@ class ProductEditViewModel(
     var uiStateProduct by mutableStateOf(UIStateProduct())
         private set
 
-    /** preload data dari ProductScreen */
     fun setProduct(data: DataProduct) {
         uiStateProduct = UIStateProduct(
             detailProduct = DetailProduct(
@@ -33,8 +32,8 @@ class ProductEditViewModel(
     private fun validasiInput(
         detail: DetailProduct = uiStateProduct.detailProduct
     ): Boolean {
-        return detail.product_name.isNotBlank()
-                && detail.category_id != 0
+        return detail.product_name.isNotBlank() &&
+                detail.category_id != 0
     }
 
     fun updateUiState(detailProduct: DetailProduct) {
@@ -45,27 +44,13 @@ class ProductEditViewModel(
     }
 
     suspend fun updateProduct() {
-        if (!uiStateProduct.isEntryValid) {
-            println("Validasi gagal")
-            return
-        }
+        if (!uiStateProduct.isEntryValid) return
 
-        try {
-            val detail = uiStateProduct.detailProduct
+        val detail = uiStateProduct.detailProduct
 
-            val response =
-                repositoryProduct.editDataProduct(
-                    detail.product_id,
-                    detail.toDataProduct()
-                )
-
-            if (response.isSuccessful) {
-                println("Produk berhasil diupdate")
-            } else {
-                println("Gagal update")
-            }
-        } catch (e: Exception) {
-            println("Error update product: ${e.message}")
-        }
+        repositoryProduct.editDataProduct(
+            detail.product_id,
+            detail.toDataProduct()
+        )
     }
 }

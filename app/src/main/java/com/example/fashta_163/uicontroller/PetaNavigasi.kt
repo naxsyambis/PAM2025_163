@@ -12,6 +12,8 @@ import com.example.fashta_163.view.auth.LoginScreen
 import com.example.fashta_163.view.auth.RegisterScreen
 import com.example.fashta_163.view.dashboard.DashboardScreen
 import com.example.fashta_163.view.pengaturan.PengaturanScreen
+import com.example.fashta_163.view.produk.ProductCreateScreen
+import com.example.fashta_163.view.produk.ProductScreen
 import com.example.fashta_163.viewmodel.LoginViewModel
 import com.example.fashta_163.viewmodel.RegisterViewModel
 import com.example.fashta_163.viewmodel.provider.PenyediaViewModel
@@ -70,7 +72,8 @@ fun FashApp(
             DashboardScreen(
                 onNavigateToPengaturan = {
                     navController.navigate(DestinasiPengaturan.route)
-                }
+                },
+                onNavigateToProduct = { navController.navigate(DestinasiProduct.route) }
             )
         }
 
@@ -82,5 +85,23 @@ fun FashApp(
             KelolaKategoriScreen()
         }
 
+        composable("product_home") {
+            ProductScreen(
+                navigateToAdd = {
+                    navController.navigate(DestinasiProductCreate.route)
+                },
+                navigateToEdit = { product ->
+                    navController.navigate(
+                        DestinasiProductEdit.createRoute(product.product_id)
+                    )
+                }
+            )
+        }
+
+        composable(DestinasiProductCreate.route) {
+            ProductCreateScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
     }
 }

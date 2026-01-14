@@ -38,4 +38,13 @@ class ProductHomeViewModel(
             }
         }
     }
+
+    fun nonActiveProduct(id: Int) {
+        viewModelScope.launch {
+            repositoryProduct.hapusDataProduct(id)
+            loadProduct()
+        }
+    }
+
+
 }
