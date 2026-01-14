@@ -1,0 +1,39 @@
+package com.example.fashta_163.apiservice
+
+import com.example.fashta_163.modeldata.DataItemProduct
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
+
+interface ServiceApiItemProduct {
+
+    @GET("item/read.php")
+    suspend fun getItemByProduct(
+        @Query("product_id") productId: Int
+    ): List<DataItemProduct>
+
+    @POST("item/create.php")
+    suspend fun postItemProduct(
+        @Body itemProduct: DataItemProduct
+    ): Response<Void>
+
+    @PUT("item/update.php")
+    suspend fun updateItemProduct(
+        @Query("id") itemId: Int,
+        @Body itemProduct: DataItemProduct
+    ): Response<Void>
+
+    @PUT("item/deactivate.php")
+    suspend fun deactivateItemProduct(
+        @Query("id") itemId: Int
+    ): Response<Void>
+
+    @GET("item/read_one.php")
+    suspend fun getItemById(
+        @Query("id") itemId: Int
+    ): DataItemProduct
+
+}

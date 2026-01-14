@@ -7,10 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.fashta_163.uicontroller.route.*
 import com.example.fashta_163.view.auth.LoginScreen
 import com.example.fashta_163.view.auth.RegisterScreen
 import com.example.fashta_163.view.dashboard.DashboardScreen
+import com.example.fashta_163.view.item.ItemProductScreen
 import com.example.fashta_163.view.pengaturan.PengaturanScreen
 import com.example.fashta_163.view.produk.ProductCreateScreen
 import com.example.fashta_163.view.produk.ProductScreen
@@ -94,6 +97,11 @@ fun FashApp(
                     navController.navigate(
                         DestinasiProductEdit.createRoute(product.product_id)
                     )
+                },
+                navigateToItemProduct = { productId ->
+                    navController.navigate(
+                        DestinasiItemProduk.createRoute(productId)
+                    )
                 }
             )
         }
@@ -101,6 +109,26 @@ fun FashApp(
         composable(DestinasiProductCreate.route) {
             ProductCreateScreen(
                 navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = DestinasiItemProduk.route,
+            arguments = listOf(navArgument("productId") {
+                type = NavType.IntType
+            })
+        ) {
+            ItemProductScreen(
+                navigateToAdd = { productId ->
+                    navController.navigate(
+                        DestinasiItemProdukCreate.createRoute(productId)
+                    )
+                },
+                navigateToEdit = { itemId ->
+                    navController.navigate(
+                        DestinasiItemProdukEdit.createRoute(itemId)
+                    )
+                }
             )
         }
     }

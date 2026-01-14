@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,7 +46,8 @@ import com.example.fashta_163.viewmodel.provider.PenyediaViewModel
 @Composable
 fun ProductScreen(
     navigateToAdd: () -> Unit,
-    navigateToEdit: (DataProduct) -> Unit
+    navigateToEdit: (DataProduct) -> Unit,
+    navigateToItemProduct: (Int) -> Unit
 ) {
     val viewModel: ProductHomeViewModel =
         viewModel(factory = PenyediaViewModel.Factory)
@@ -88,7 +90,7 @@ fun ProductScreen(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth()
-                                .clickable { navigateToEdit(product) }
+                                .clickable { navigateToItemProduct(product.product_id) }
                         ) {
                             Column {
 
@@ -158,6 +160,21 @@ fun ProductScreen(
                                                 Text("Aktifkan")
                                             }
                                         }
+
+                                        IconButton(
+                                            onClick = { navigateToEdit(product) },
+                                            enabled = product.is_active == 1
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = "Edit Produk",
+                                                tint = if (product.is_active == 1)
+                                                    MaterialTheme.colorScheme.primary
+                                                else
+                                                    Color.Gray
+                                            )
+                                        }
+
                                     }
                                 }
                             }
