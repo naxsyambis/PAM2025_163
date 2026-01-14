@@ -46,5 +46,16 @@ class ProductHomeViewModel(
         }
     }
 
-
+    fun reActivateProduct(product: DataProduct) {
+        viewModelScope.launch {
+            // Kita menggunakan endpoint EDIT untuk mengaktifkan kembali (is_active = 1)
+            val activeProduct = product.copy(is_active = 1)
+            try {
+                repositoryProduct.editDataProduct(product.product_id, activeProduct)
+                loadProduct() // Reload setelah update
+            } catch (e: Exception) {
+                println("Gagal mengaktifkan kembali: ${e.message}")
+            }
+        }
+    }
 }

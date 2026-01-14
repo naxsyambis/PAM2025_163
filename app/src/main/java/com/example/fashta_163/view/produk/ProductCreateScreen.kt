@@ -20,6 +20,13 @@ import com.example.fashta_163.viewmodel.Produk.ProductCreateViewModel
 import com.example.fashta_163.viewmodel.pengaturan.CategoryReadViewModel
 import com.example.fashta_163.viewmodel.provider.PenyediaViewModel
 import kotlinx.coroutines.launch
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +41,17 @@ fun ProductCreateScreen(
 
     val uiState = entryViewModel.uiStateProduct
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            entryViewModel.updateUiState(
+                uiState.detailProduct.copy(image_url = uri.toString())
+            )
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -49,17 +67,45 @@ fun ProductCreateScreen(
                 .padding(16.dp)
         ) {
 
+            Text(text = "Foto Produk")
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Logika: Jika ada gambar -> Tampilkan Preview, Jika belum -> Tampilkan Tombol
+            if (uiState.detailProduct.image_url.isNotEmpty()) {
+                AsyncImage(
+                    model = uiState.detailProduct.image_url,
+                    contentDescription = "Preview Gambar",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clickable {
+                            // Klik gambar untuk mengganti foto
+                            imagePickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Button(
+                    onClick = {
+                        imagePickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Pilih Foto dari Galeri")
+                }
+            }
             OutlinedTextField(
                 value = uiState.detailProduct.image_url,
-                onValueChange = {
-                    entryViewModel.updateUiState(
-                        uiState.detailProduct.copy(
-                            image_url = it
-                        )
-                    )
-                },
-                label = { Text("URL Gambar (opsional)") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { /* Tidak melakukan apa-apa karena readOnly */ },
+                label = { Text("Path Gambar") },
+                readOnly = true, // User tidak bisa ketik manual
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
