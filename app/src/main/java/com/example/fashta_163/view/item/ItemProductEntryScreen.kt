@@ -1,6 +1,9 @@
 package com.example.fashta_163.view.item
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -24,12 +27,22 @@ fun ItemProductEntryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Tambah Item Produk") })
+            TopAppBar(
+                title = { Text("Tambah Item Produk") },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
+                }
+            )
         }
-    ) { padding ->
+    ) { paddingValues ->
 
         ItemProductForm(
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.padding(paddingValues),
             detail = uiState.detailItemProduct,
             onValueChange = viewModel::updateUiState,
             isButtonEnabled = uiState.isEntryValid,

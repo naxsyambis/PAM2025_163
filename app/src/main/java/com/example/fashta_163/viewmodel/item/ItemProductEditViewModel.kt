@@ -23,7 +23,6 @@ class ItemProductEditViewModel(
     private val itemId: Int =
         checkNotNull(savedStateHandle[DestinasiItemProdukEdit.itemIdArg])
 
-    // 🔥 INI KUNCI UTAMA
     var uiStateItemProduct by mutableStateOf(UIStateItemProduct())
         private set
 
@@ -41,7 +40,6 @@ class ItemProductEditViewModel(
         }
     }
 
-    // 🔥 WAJIB PAKAI copy(), JANGAN BUAT STATE BARU SEMBARANG
     fun updateUiState(detailItemProduct: DetailItemProduct) {
         uiStateItemProduct = uiStateItemProduct.copy(
             detailItemProduct = detailItemProduct

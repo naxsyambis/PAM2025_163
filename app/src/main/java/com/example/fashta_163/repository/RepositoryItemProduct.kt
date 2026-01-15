@@ -44,11 +44,15 @@ class JaringanRepositoryItemProduct(
         serviceApiItemProduct.postItemProduct(itemProduct)
 
     override suspend fun updateItemProduct(
-        ItemId: Int,
+        itemId: Int,
         itemProduct: DataItemProduct
-    ) {
-        serviceApiItemProduct.updateItemProduct(itemId = Int, itemProduct)
+    ): Response<Void> {
+        return serviceApiItemProduct.updateItemProduct(
+            itemId = itemId,
+            data = itemProduct
+        )
     }
+
     override suspend fun deactivateItemProduct(
         itemId: Int
     ): Response<Void> =
@@ -56,5 +60,4 @@ class JaringanRepositoryItemProduct(
 
     override suspend fun getItemById(itemId: Int): DataItemProduct =
         serviceApiItemProduct.getItemById(itemId)
-
 }

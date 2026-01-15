@@ -28,7 +28,7 @@ interface ServiceApiItemProduct {
         @Body data: DataItemProduct
     ): Response<Void>
 
-    @PUT("item/deactivate.php")
+    @PUT("item/delete.php")
     suspend fun deactivateItemProduct(
         @Query("id") itemId: Int
     ): Response<Void>

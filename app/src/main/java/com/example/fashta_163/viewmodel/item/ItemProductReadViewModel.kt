@@ -46,7 +46,6 @@ class ItemProductReadViewModel(
         }
     }
 
-
     fun getProductId(): Int = productId
 
     suspend fun deactivateItem(itemId: Int) {
