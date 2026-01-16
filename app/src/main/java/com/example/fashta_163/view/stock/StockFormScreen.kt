@@ -27,6 +27,8 @@ fun StockForm(
     val reasons = StockReason.values().toList()
     var expanded by remember { mutableStateOf(false) }
     var selectedReason by remember { mutableStateOf(StockReason.PURCHASE) }
+    var note by remember { mutableStateOf("") }
+
 
     Column(Modifier.padding(16.dp)) {
 
@@ -87,6 +89,19 @@ fun StockForm(
 
         Spacer(Modifier.height(24.dp))
 
+        // ===== NOTE / CATATAN =====
+        Spacer(Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = note,
+            onValueChange = { note = it },
+            label = { Text("Catatan (opsional)") },
+            modifier = Modifier.fillMaxWidth(),
+            minLines = 2,
+            maxLines = 4
+        )
+
+
         // ===== BUTTON SIMPAN =====
         Button(
             onClick = {
@@ -101,7 +116,7 @@ fun StockForm(
                     type = type,
                     qty = qtyInt,
                     reason = selectedReason.name,
-                    note = null,
+                    note = note.ifBlank { null },
                     onError = { errorMessage = it },
                     onSuccess = onSuccess
                 )

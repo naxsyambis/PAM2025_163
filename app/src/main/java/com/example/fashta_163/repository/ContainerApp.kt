@@ -5,6 +5,7 @@ import com.example.fashta_163.apiservice.ServiceApiAuth
 import com.example.fashta_163.apiservice.ServiceApiCategory
 import com.example.fashta_163.apiservice.ServiceApiItemProduct
 import com.example.fashta_163.apiservice.ServiceApiProduct
+import com.example.fashta_163.apiservice.ServiceApiReport
 import com.example.fashta_163.apiservice.ServiceApiStock
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -22,6 +23,9 @@ interface ContainerApp {
     val repositoryItemProduct: RepositoryItemProduct
 
     val repositoryStock: RepositoryStock
+
+    val repositoryReport: RepositoryReport
+
 
 }
 
@@ -89,8 +93,16 @@ class DefaultContainerApp : ContainerApp {
         JaringanRepositoryStock(retrofitServiceStock)
     }
 
+    private val retrofitServiceReport: ServiceApiReport by lazy {
+        retrofit.create(ServiceApiReport::class.java)
+    }
 
-
+    override val repositoryReport: RepositoryReport by lazy {
+        JaringanRepositoryReport(
+            serviceReport = retrofitServiceReport,
+            serviceStock = retrofitServiceStock
+        )
+    }
 }
 
 class AplikasiFash : Application() {

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fashta_163.modeldata.DataStockMovement
 import com.example.fashta_163.modeldata.StockHistory
 import com.example.fashta_163.modeldata.StockItem
+import com.example.fashta_163.modeldata.StockItemDetail
 import com.example.fashta_163.repository.RepositoryStock
 import kotlinx.coroutines.launch
 
@@ -32,6 +33,10 @@ class StockViewModel(
     var currentStock by mutableStateOf(0)
         private set
 
+    var itemDetail by mutableStateOf<StockItemDetail?>(null)
+        private set
+
+
     var history by mutableStateOf<List<StockHistory>>(emptyList())
         private set
 
@@ -43,6 +48,19 @@ class StockViewModel(
                 StatusUiStockList.Success(fullList)
             } catch (e: Exception) {
                 StatusUiStockList.Error
+            }
+        }
+    }
+
+    fun loadItemDetail(itemId: Int) {
+        viewModelScope.launch {
+            try {
+                val result = repository.getItemDetail(itemId)
+                println("ITEM DETAIL => $result")
+                itemDetail = result
+            } catch (e: Exception) {
+                println("ERROR ITEM DETAIL => ${e.message}")
+                itemDetail = null
             }
         }
     }

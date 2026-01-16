@@ -4,6 +4,7 @@ import com.example.fashta_163.modeldata.ApiMessage
 import com.example.fashta_163.modeldata.DataStockMovement
 import com.example.fashta_163.modeldata.StockHistory
 import com.example.fashta_163.modeldata.StockItem
+import com.example.fashta_163.modeldata.StockItemDetail
 import com.example.fashta_163.modeldata.StockResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -30,4 +31,16 @@ interface ServiceApiStock {
 
     @GET("stock/read_list.php")
     suspend fun getStockList(): List<StockItem>
+
+    @GET("stock/read_item_detail.php")
+    suspend fun getItemDetail(
+        @Query("item_id") itemId: Int
+    ): StockItemDetail
+
+    @GET("stock/read_by_product.php")
+    suspend fun getItemByProduct(
+        @Query("product_id") productId: Int
+    ): List<StockItem>
+
+
 }

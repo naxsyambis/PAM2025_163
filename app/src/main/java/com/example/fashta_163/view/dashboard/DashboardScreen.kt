@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.dp
 fun DashboardScreen(
     onNavigateToPengaturan: () -> Unit,
     onNavigateToProduct: () -> Unit,
-    onNavigateToStock: () -> Unit
+    onNavigateToStock: () -> Unit,
+    onNavigateToReport: () -> Unit
 ) {
     Button(onClick = onNavigateToStock) {
         Text("Kelola Stok")
@@ -93,6 +94,23 @@ fun DashboardScreen(
                     )
                     Text(
                         text = "Kelola stok masuk dan keluar",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigateToReport() }
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Laporan",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "Riwayat stok dan audit",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

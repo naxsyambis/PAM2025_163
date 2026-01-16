@@ -36,8 +36,8 @@ fun StockMenuScreen(
     val viewModel: StockViewModel =
         viewModel(factory = PenyediaViewModel.Factory)
 
-    // 🔥 Ambil stok saat screen dibuka
     LaunchedEffect(itemId) {
+        viewModel.loadItemDetail(itemId)
         viewModel.loadStock(itemId)
     }
 
@@ -60,15 +60,18 @@ fun StockMenuScreen(
                 .padding(16.dp)
         ) {
 
-            // ===== INFO STOK =====
-            Text(
-                text = "Stok Saat Ini: ${viewModel.currentStock}",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            viewModel.itemDetail?.let { detail ->
+                ItemStockDetailCard(
+                    name = detail.product_name,
+                    size = detail.size,
+                    color = detail.color,
+                    stock = viewModel.currentStock
+                )
 
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
+            }
 
-            // ===== STOCK IN (SELALU AKTIF) =====
+
             Button(
                 onClick = { navigateToStockIn(itemId) },
                 modifier = Modifier.fillMaxWidth()
@@ -78,16 +81,15 @@ fun StockMenuScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // ===== STOCK OUT (DISABLE JIKA STOK = 0) =====
             Button(
                 onClick = { navigateToStockOut(itemId) },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = viewModel.currentStock > 0   // 🔥 INI INTINYA
+                enabled = viewModel.currentStock > 0
             ) {
                 Text("Stock OUT")
             }
 
-            // ===== PESAN JIKA STOK KOSONG =====
+
             if (viewModel.currentStock == 0) {
                 Spacer(Modifier.height(8.dp))
                 Text(

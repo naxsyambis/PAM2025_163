@@ -13,4 +13,5 @@
     <string name="menu_stock">stock</string>
     <string name="stock_in">stock In</string>
     <string name="stock_out">stock Out</string>
+    <string name="menu_laporan">Laporan</string>
 </resources>

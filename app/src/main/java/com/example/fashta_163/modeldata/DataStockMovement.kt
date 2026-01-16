@@ -41,3 +41,11 @@ enum class StockReason {
     LOST,
     ADJUSTMENT
 }
+
+@Serializable
+data class StockItemDetail(
+    val item_id: Int,
+    val product_name: String,
+    val size: String,
+    val color: String
+)

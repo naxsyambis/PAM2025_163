@@ -20,6 +20,7 @@ import com.example.fashta_163.view.pengaturan.PengaturanScreen
 import com.example.fashta_163.view.produk.ProductCreateScreen
 import com.example.fashta_163.view.produk.ProductEditScreen
 import com.example.fashta_163.view.produk.ProductScreen
+import com.example.fashta_163.view.report.ReportScreen
 import com.example.fashta_163.view.stock.StockInScreen
 import com.example.fashta_163.view.stock.StockListScreen
 import com.example.fashta_163.view.stock.StockMenuScreen
@@ -84,6 +85,9 @@ fun FashApp(
                 },
                 onNavigateToStock = {
                     navController.navigate(DestinasiStockList.route)
+                },
+                onNavigateToReport = {
+                    navController.navigate(DestinasiReport.route)
                 }
             )
         }
@@ -225,5 +229,52 @@ fun FashApp(
                 }
             )
         }
+
+        composable(
+            route = DestinasiStockIn.route,
+            arguments = listOf(
+                navArgument(DestinasiStockIn.itemIdArg) {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments!!
+                .getInt(DestinasiStockIn.itemIdArg)
+
+            StockInScreen(
+                itemId = itemId,
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = DestinasiStockOut.route,
+            arguments = listOf(
+                navArgument(DestinasiStockOut.itemIdArg) {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val itemId =
+                backStackEntry.arguments!!
+                    .getInt(DestinasiStockOut.itemIdArg)
+
+            StockOutScreen(
+                itemId = itemId,
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(DestinasiReport.route) {
+            ReportScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+
     }
 }
